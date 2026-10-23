@@ -1,8 +1,8 @@
-name: Release
+name: Release PyPI
 
 on:
   push:
-    tags: ["v*"]
+    tags: ["py-v*"]
 
 permissions:
   contents: read
@@ -10,6 +10,9 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: python
     environment:
       name: pypi
       url: https://pypi.org/p/timeplace
@@ -24,3 +27,5 @@ jobs:
       - run: uv run pytest
       - run: uv build
       - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: python/dist/

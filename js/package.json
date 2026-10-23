@@ -1,0 +1,36 @@
+{
+  "name": "timeplace",
+  "version": "0.1.0",
+  "description": "Parse and format timeplace lines: a moment, a place, and a comment.",
+  "author": "Ryan Vandersmith <ryanvandersmith@gmail.com>",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "tz-lookup": "^6.1.25"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^3.0.0"
+  }
+}

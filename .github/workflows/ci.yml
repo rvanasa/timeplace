@@ -12,8 +12,11 @@ on:
         default: false
 
 jobs:
-  test:
+  python:
     runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: python
     strategy:
       fail-fast: false
       matrix:
@@ -30,11 +33,50 @@ jobs:
       - run: uv run mypy src tests
       - run: uv run pytest
 
-  live:
+  python-live:
     if: github.event_name == 'workflow_dispatch' && inputs.live
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: python
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
       - run: uv sync --locked
       - run: uv run pytest --live
+
+  js:
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: js
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node-version: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm install
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+
+  js-live:
+    if: github.event_name == 'workflow_dispatch' && inputs.live
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: js
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - run: npm test
+        env:
+          LIVE: "1"
