@@ -1,0 +1,41 @@
+[project]
+name = "timeplace"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Ryan Vandersmith", email = "ryanvandersmith@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "geopy>=2.5.0",
+    "timezonefinder>=9.2.0",
+    "tzdata>=2026.5",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.13,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "mypy>=2.4.0",
+    "pytest>=9.1.1",
+    "ruff>=0.17.2",
+]
+
+[tool.mypy]
+strict = true
+
+[[tool.mypy.overrides]]
+module = ["geopy.*"]
+ignore_missing_imports = true
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
