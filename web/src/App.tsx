@@ -143,33 +143,44 @@ export default function App() {
 
       <div className="field">
         <div className="field-row">
-          <input
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder={DEFAULT_TIMEPLACE}
-            spellCheck={false}
-            autoCapitalize="off"
-            autoComplete="off"
-            aria-label="Timeplace"
-          />
+          <div className="input-wrap">
+            <input
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder={DEFAULT_TIMEPLACE}
+              spellCheck={false}
+              autoCapitalize="off"
+              autoComplete="off"
+              aria-label="Timeplace"
+            />
+            {text && (
+              <button type="button" className="clear-button" onClick={() => setText("")} aria-label="Clear text" title="Clear">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M6 6l12 12M18 6 6 18" />
+                </svg>
+              </button>
+            )}
+          </div>
+          {text.trim() && (
           <button
             type="button"
             className={`copy-button${copied ? " copied" : ""}`}
             onClick={copyText}
             aria-label="Copy timeplace text"
             title={copied ? "Copied" : "Copy timeplace text"}
-            disabled={!text.trim()}
           >
             {copied ? (
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M9.55 17.3 4.7 12.45l1.4-1.4 3.45 3.45 8.35-8.35 1.4 1.4-9.75 9.75Z" />
               </svg>
             ) : (
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M9 9.75A2.75 2.75 0 0 1 11.75 7h7.5A2.75 2.75 0 0 1 22 9.75v7.5A2.75 2.75 0 0 1 19.25 20h-7.5A2.75 2.75 0 0 1 9 17.25v-7.5Zm-5.25 1.5A2.75 2.75 0 0 1 6.5 8.5h7.5A2.75 2.75 0 0 1 16.75 11.25v7.5A2.75 2.75 0 0 1 14 21.5H6.5A2.75 2.75 0 0 1 3.75 18.75v-7.5Z" />
+              <svg viewBox="0 0 24 24" aria-hidden="true" className="stroke">
+                <rect x="8" y="3" width="8" height="4" rx="1" />
+                <path d="M16 5h2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2" />
               </svg>
             )}
           </button>
+          )}
         </div>
         <p className="status muted" aria-live="polite">
           {busy ? "resolving…" : unresolved ? "place not found" : tp.place ? `${tp.place.coords}${placeZone ? ` · ${placeZone}` : ""}` : ""}

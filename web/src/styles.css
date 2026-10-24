@@ -190,9 +190,45 @@ button:hover {
   font: 500 17px var(--mono);
 }
 
-.field-row input {
+.input-wrap {
+  position: relative;
   flex: 1;
-  width: auto;
+}
+
+.input-wrap input {
+  padding-right: 48px;
+}
+
+.clear-button {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  transform: translateY(-50%);
+  color: var(--muted-foreground);
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+}
+
+.clear-button:hover {
+  background: var(--muted);
+  color: var(--foreground);
+}
+
+.clear-button svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
 }
 
 .copy-button {
@@ -205,14 +241,21 @@ button:hover {
   padding: 0;
   color: var(--foreground);
   cursor: pointer;
-  background: var(--background);
-  border: 1px solid var(--border);
+  background: transparent;
+  border: 1.5px solid var(--foreground);
   border-radius: calc(var(--radius) + 2px);
-  box-shadow: var(--shadow);
 }
 
 .copy-button:hover:not(:disabled) {
   background: var(--muted);
+}
+
+.copy-button svg.stroke {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .copy-button svg {
@@ -222,9 +265,9 @@ button:hover {
 }
 
 .copy-button.copied {
-  background: var(--primary);
+  background: transparent;
   border-color: var(--primary);
-  color: var(--primary-foreground);
+  color: var(--primary);
 }
 
 .copy-button:disabled {
