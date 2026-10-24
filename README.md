@@ -37,6 +37,15 @@ The format is not specific to weather. It works for any use case that involves a
 2024-04-08 1:30pm Dallas, TX #eclipse
 ```
 
+> **Documentation:** [Python guide](python/README.md) · [JavaScript guide](js/README.md) · [Format specification](SPEC.md)
+
+## Apps supporting the format
+
+- [Browser demo](https://ryanvandersmith.com/timeplace)
+- [Cloud inversion forecast](https://inversion.streamlit.app/)
+- [Sounding viewer](https://sounding.streamlit.app/)
+- [Mountain wave visualizer](https://mtnwave.streamlit.app/)
+
 ## Motivation
 
 Severe weather research often starts with a list of events: "Enid, OK tornado", "supercell in southeast Colorado on 7/8/23". In order to view radar, satellite, weather models, etc. for a case study, it is often necessary to use either a pre-existing database such as [Chase Archive](https://chasearchive.com/), [Tornado Archive](https://tornadoarchive.com/home/), the [SPC Events Archive](https://www.spc.noaa.gov/exper/archive/events/), or individual analysis tools which each have their own gaps and limitations.
@@ -92,19 +101,6 @@ tp.format({ canonical: true }); // "2026-04-24 01z 36.39559,-97.87839 #tornado #
 ```
 
 Every part is optional; the order is always time, place, comment.
-
-> **Documentation:** [Python guide](python/README.md) · [JavaScript guide](js/README.md) · [Format specification](SPEC.md)
-
-## Demo webapp
-
-A browser demo is available at https://ryanvandersmith.com/timeplace.
-
-## Apps supporting the format
-
-- Browser demo: https://ryanvandersmith.com/timeplace
-- Cloud inversion forecast: https://inversion.streamlit.app/
-- Sounding viewer: https://sounding.streamlit.app/
-- Mountain wave visualizer: https://mtnwave.streamlit.app/
 
 ## Working with event lists
 
