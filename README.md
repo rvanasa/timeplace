@@ -1,6 +1,27 @@
-# timeplace
+<h1 align="center"><code>timeplace</code></h1>
 
-Parse and format **timeplace** lines: a single line of text naming a time, a place, and a comment/tag section.
+<p align="center">
+  Parse and format <b>timeplace</b> lines: a single line of text naming a time, a place, and a comment/tag section.
+</p>
+
+<p align="center">
+  <a href="https://github.com/rvanasa/timeplace/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/rvanasa/timeplace/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://pypi.org/project/timeplace/"><img alt="PyPI" src="https://img.shields.io/pypi/v/timeplace?logo=pypi&logoColor=white&label=PyPI"></a>
+  <a href="https://pypi.org/project/timeplace/"><img alt="Python versions" src="https://img.shields.io/pypi/pyversions/timeplace?logo=python&logoColor=white"></a>
+  <a href="https://www.npmjs.com/package/timeplace"><img alt="npm" src="https://img.shields.io/npm/v/timeplace?logo=npm&label=npm"></a>
+  <a href="https://www.npmjs.com/package/timeplace"><img alt="Node versions" src="https://img.shields.io/node/v/timeplace?logo=nodedotjs&logoColor=white"></a>
+  <a href="https://github.com/rvanasa/timeplace/blob/main/LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-blue"></a>
+  <a href="SPEC.md"><img alt="Spec v0.1 (draft)" src="https://img.shields.io/badge/spec-v0.1%20draft-orange"></a>
+</p>
+
+<p align="center">
+  <a href="SPEC.md"><b>Specification</b></a> ·
+  <a href="python/README.md"><b>Python docs</b></a> ·
+  <a href="js/README.md"><b>JavaScript docs</b></a> ·
+  <a href="https://rvanasa.github.io/timeplace/"><b>API reference</b></a>
+</p>
+
+---
 
 ```
 2026-04-23 8pm Enid, OK #tornado #ef4
@@ -8,7 +29,7 @@ Parse and format **timeplace** lines: a single line of text naming a time, a pla
 
 The goal is to define a standard, plain-text format for severe weather events for interoperability between weather analysis tools (radar, satellite, reanalysis, storm report, and sounding retrieval, plotting).
 
-The format is not specific to weather. It works for any use case that involves a time and a place: earthquakes, wildfires, field observations, photos.
+The format is not specific to weather. It works for any use case that involves a time and a place: wildfires, earthquakes, field observations, photos.
 
 ```
 2025-05-18 5:30pm Arnett, OK # Several tornadoes
@@ -18,7 +39,7 @@ The format is not specific to weather. It works for any use case that involves a
 
 ## Motivation
 
-Severe weather research often starts with a list of events: "the Enid, OK tornado", "the supercell in southeast Colorado on 7/8/23". In order to view radar, satellite, weather models, etc. for a case study, it is often necessary to use either a centralized database such as Chase Archive or Tornado Archive or manually plug the date/time into each analysis tool.
+Severe weather research often starts with a list of events: "Enid, OK tornado", "supercell in southeast Colorado on 7/8/23". In order to view radar, satellite, weather models, etc. for a case study, it is often necessary to use either a pre-existing database such as [Chase Archive](https://chasearchive.com/), [Tornado Archive](https://tornadoarchive.com/home/), the [SPC Events Archive](https://www.spc.noaa.gov/exper/archive/events/), or individual analysis tools which each have their own gaps and limitations.
 
 `timeplace` is a standard text format to solve this problem.
 
@@ -70,7 +91,9 @@ tp.place;    // Place { lat: 36.39..., lon: -97.87..., name: "Enid, OK" }
 tp.format({ canonical: true }); // "2026-04-24 01z 36.39559,-97.87839 #tornado #ef4"
 ```
 
-Every part is optional; the order is always time, place, comment. See the [Python](python/README.md) and [npm](js/README.md) docs for the full API.
+Every part is optional; the order is always time, place, comment.
+
+> **Documentation:** [Python guide](python/README.md) · [JavaScript guide](js/README.md) · [Format specification](SPEC.md)
 
 ## Working with event lists
 
@@ -145,13 +168,14 @@ for (const line of readFileSync("cases.txt", "utf8").split("\n")) {
 | Place | `Arnett, OK`, `40.01499,-105.27055` | Names are geocoded (Nominatim); coordinates are WGS84 decimal degrees. Names cannot contain `#`. |
 | Comment | `# any text`, `#tornado #ef4` | Starts at the first `#`. `#word` tokens (preceded by start or whitespace) are tags, lowercased; `# text` and URL fragments are not. |
 
-Not supported: time ranges, UTC offsets such as `-07:00`, 24-hour local time without a suffix, elevation, and place uncertainty. The full grammar, strict subset, and canonical form are in [SPEC.md](SPEC.md) (version 0.1, draft).
+Not supported: time ranges, UTC offsets such as `-07:00`, 24-hour local time without a suffix, elevation, and place uncertainty. 
+> **Full specification:** the grammar, strict subset, and canonical form are in [SPEC.md](SPEC.md) (version 0.1, draft).
 
 ## Specification and implementations
 
-| Directory | Package | Registry | Docs |
-| --- | --- | --- | --- |
-| [python/](python/) | `timeplace` | PyPI | [python/README.md](python/README.md) |
-| [js/](js/) | `timeplace` | npm | [js/README.md](js/README.md) |
+| Language | Directory | Install | Registry | Documentation |
+| --- | --- | --- | --- | --- |
+| Python 3.12+ | [python/](python/) | `pip install timeplace` | [PyPI](https://pypi.org/project/timeplace/) | [Python guide](python/README.md) |
+| JavaScript / TypeScript | [js/](js/) | `npm install timeplace` | [npm](https://www.npmjs.com/package/timeplace) | [JS guide](js/README.md) · [API reference](https://rvanasa.github.io/timeplace/) |
 
 Releases are tagged `py-v*` (PyPI) and `js-v*` (npm).
