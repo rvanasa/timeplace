@@ -32,6 +32,8 @@ def test_name_local_time() -> None:
 def test_utc_and_coords() -> None:
     tp = p("2022-12-02 05z Boulder, CO # Downslope")
     assert tp.time == dt.datetime(2022, 12, 2, 5, tzinfo=dt.UTC)
+    tp = p("2022-12-02 05Z Boulder, CO # Downslope")
+    assert tp.time == dt.datetime(2022, 12, 2, 5, tzinfo=dt.UTC)
     tp = p("2018-05-28 5pm 39.62261,-102.97337 # Flagler, multiple landspouts")
     assert tp.place == Place(39.62261, -102.97337)
     assert tp.time == dt.datetime(2018, 5, 28, 17, tzinfo=DENVER)
@@ -80,6 +82,8 @@ def test_invalid_values() -> None:
 
 def test_strict() -> None:
     tp = parse("2022-12-02 05z 40.01499,-105.27055 # hi", strict=True)
+    assert tp.place == Place(40.01499, -105.27055)
+    tp = parse("2022-12-02 05Z 40.01499,-105.27055 # hi", strict=True)
     assert tp.place == Place(40.01499, -105.27055)
     for bad in ("Boulder, CO", "2022-12-02 5pm 1,1", "2022-12-02 1,1", "# x"):
         with pytest.raises(ValueError):

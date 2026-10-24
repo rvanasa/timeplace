@@ -28,6 +28,10 @@ describe("parse", () => {
       "2022-12-02T05:00:00.000Z",
       "UTC",
     ]);
+    expect(at(await p("2022-12-02 05Z Boulder, CO # Downslope"))).toEqual([
+      "2022-12-02T05:00:00.000Z",
+      "UTC",
+    ]);
     const tp = await p("2018-05-28 5pm 39.62261,-102.97337 # Flagler, multiple landspouts");
     expect(tp.place).toEqual(new Place(39.62261, -102.97337));
     expect(at(tp)[0]).toBe("2018-05-28T23:00:00.000Z");
@@ -78,6 +82,8 @@ describe("parseStrict", () => {
   test("accepts strict form", () => {
     const tp = parseStrict("2022-12-02 05z 40.01499,-105.27055 # hi");
     expect(tp.place).toEqual(new Place(40.01499, -105.27055));
+    const upper = parseStrict("2022-12-02 05Z 40.01499,-105.27055 # hi");
+    expect(upper.place).toEqual(new Place(40.01499, -105.27055));
   });
 
   test("rejects everything else", () => {

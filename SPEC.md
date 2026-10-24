@@ -12,6 +12,7 @@ A **timeplace** (or TimePlace) is a single line of text naming a moment, a place
 2026-10-21 6:30pm Show Low, AZ #photogenic #supercell https://x.com/craigmatthews48/status/2113036632744218761
 2021-12-30 2pm Boulder, CO # Marshall Fire downslope wind, 100mph
 2022-12-02 05z Boulder, CO # Downslope wind, 50-80mph
+2022-12-02 05Z Boulder, CO # identical UTC time using capital Z
 2018-05-28 5pm 39.62261,-102.97337 # Flagler, CO - multiple landspouts
 ```
 
@@ -39,7 +40,7 @@ All components are optional in the lenient syntax; a line may be only a date, on
 - Clock time is optional. Without a clock time, the value is a date only.
 - Hour may be 1 or 2 digits; minutes are optional (`:MM`) and default to `00`.
 - Suffix:
-  - `z` / `Z`: UTC, 24-hour clock (`05z`, `1830z`-style is NOT allowed; use `18:30z`).
+  - UTC is written with either lowercase `z` or uppercase `Z`; both are accepted and mean the same thing (`05z` and `05Z` are both valid UTC times). 24-hour clock format is used (`05z`, `18:30z`); `1830z`-style is NOT allowed.
   - `am` / `pm` (case-insensitive): 12-hour local time. `12am` is midnight, `12pm` is noon.
 - Local times are interpreted in the time zone of the place. If the place is absent and no zone is supplied by the client, a local clock time is unresolvable and clients should treat it as time-unknown.
 - Local times that are ambiguous or nonexistent due to DST transitions should be resolved per the client's time zone library; authors should prefer `z` for those hours.
