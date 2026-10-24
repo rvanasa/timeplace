@@ -1,4 +1,4 @@
-# timeplace (npm)
+# `timeplace`
 
 Parse and format **timeplace** lines: a single line of text naming a time, a place, and a comment. See [SPEC.md](../SPEC.md) for the format. Requires Node 24+; ESM only.
 

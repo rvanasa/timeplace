@@ -36,18 +36,12 @@ jobs:
           npm install
           npx typedoc --out ../site/js
 
-      - name: Index
+      - name: Web app
+        working-directory: web
         run: |
-          cat > site/index.html <<'EOF'
-          <!doctype html>
-          <meta charset="utf-8">
-          <title>timeplace docs</title>
-          <h1>timeplace</h1>
-          <ul>
-            <li><a href="python/">Python API</a></li>
-            <li><a href="js/">JavaScript / TypeScript API</a></li>
-          </ul>
-          EOF
+          npm install
+          npm run build
+          cp -r dist/. ../site/
 
       - uses: actions/upload-pages-artifact@v3
         with:
