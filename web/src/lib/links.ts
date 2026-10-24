@@ -24,7 +24,8 @@ export function externalLinks(c: LinkContext): ExternalLink[] {
   const { lat, lon, instant: t, now } = c;
   const started = t.getTime() <= now.getTime();
   const past = t.getTime() < now.getTime() - HOUR;
-  const recent = Math.abs(t.getTime() - now.getTime()) <= 2 * DAY;
+  const recent = t.getTime() <= now.getTime() + HOUR && t.getTime() >= now.getTime() - 2 * DAY;
+  const live = Math.abs(t.getTime() - now.getTime()) <= HOUR;
   const h = floorHour(t);
   const links: ExternalLink[] = [];
 
@@ -64,13 +65,17 @@ export function externalLinks(c: LinkContext): ExternalLink[] {
       href: `https://www.spc.noaa.gov/exper/soundings/${yymmdd(sounding)}${pad(sounding.getUTCHours())}_OBS/`,
     });
   }
-  links.push({
-    label: "Pivotal Weather",
-    scope: "HRRR",
-    href: `https://www.pivotalweather.com/model.php?rh=${ymd(h)}${pad(h.getUTCHours())}&fh=loop&r=us_c&p=sbcape_hodo&m=hrrr`,
-  });
+  if (!past) {
+    links.push({
+      label: "Pivotal Weather",
+      scope: "HRRR",
+      href: `https://www.pivotalweather.com/model.php?rh=${ymd(h)}${pad(h.getUTCHours())}&fh=loop&r=us_c&p=sbcape_hodo&m=hrrr`,
+    });
+  }
   if (recent) {
     links.push({ label: "Zoom Earth", scope: "satellite", href: `https://zoom.earth/maps/satellite/#view=${lat},${lon},7z` });
+  }
+  if (live) {
     links.push({
       label: "College of DuPage",
       scope: "regional",

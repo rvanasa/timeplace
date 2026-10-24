@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import type { TimePlace } from "timeplace";
 import { floorHour, utcClock, isoDate } from "../lib/fmt";
 import { externalLinks } from "../lib/links";
+import { reportTimePlace } from "../lib/moment";
 import {
   MESO_PARAMS,
   MESO_SECTORS,
@@ -10,6 +11,8 @@ import {
   mesoBaseLayers,
   mesoRadarUrl,
   mesoUrl,
+  fetchReports,
+  type StormReport,
   nationalForecastUrl,
   nearestSector,
   outlookFor,
@@ -48,14 +51,16 @@ function Tabs<T extends string>({ value, options, onChange }: { value: T; option
   );
 }
 
-function Mesoanalysis({ lat, lon, instant, now }: { lat: number; lon: number; instant: Date; now: Date }) {
-  const [sector, setSector] = useState(() => nearestSector(lat, lon));
+function Mesoanalysis({ lat, lon, instant, now }: { lat: number | null; lon: number | null; instant: Date; now: Date }) {
+  const pick = () => (lat === null || lon === null ? 19 : nearestSector(lat, lon));
+  const [sector, setSector] = useState(pick);
   const [auto, setAuto] = useState(true);
   const [params, setParams] = useState(["500mb", "3cvr"]);
   const [overlay, setOverlay] = useState(true);
 
   useEffect(() => {
-    if (auto) setSector(nearestSector(lat, lon));
+    if (auto) setSector(pick());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auto, lat, lon]);
 
   if (!mesoAvailable(instant, now)) return <p className="muted">SPC mesoanalysis is not available this far ahead.</p>;
@@ -156,42 +161,107 @@ function Surface({ instant, now }: { instant: Date; now: Date }) {
   );
 }
 
+const KIND_LABEL = { torn: "Tornado", wind: "Wind", hail: "Hail" } as const;
+
+function reportOf(r: StormReport): TimePlace {
+  const n = Number(r.magnitude);
+  const mag =
+    r.magnitude === "UNK" || r.magnitude === "" ? "" : r.kind === "hail" ? `${n / 100} in` : r.kind === "wind" ? `${r.magnitude} mph` : r.magnitude;
+  const what = [KIND_LABEL[r.kind], mag].filter(Boolean).join(" ");
+  return reportTimePlace(r.lat, r.lon, r.time, [what, `${r.location}, ${r.state}`, r.comments].filter(Boolean).join(" · "));
+}
+
+function Reports({ instant, onPick }: { instant: Date; onPick: (tp: TimePlace) => void }) {
+  const day = reportsImageUrl(instant);
+  const [reports, setReports] = useState<StormReport[] | null>(null);
+  const [failed, setFailed] = useState(false);
+  const [kind, setKind] = useState<string>("torn");
+
+  useEffect(() => {
+    const ctl = new AbortController();
+    setReports(null);
+    setFailed(false);
+    fetchReports(instant, ctl.signal)
+      .then(setReports)
+      .catch(() => !ctl.signal.aborted && setFailed(true));
+    return () => ctl.abort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [day]);
+
+  const available = (Object.keys(KIND_LABEL) as (keyof typeof KIND_LABEL)[]).filter((k) => reports?.some((r) => r.kind === k));
+  const active = available.includes(kind as keyof typeof KIND_LABEL) ? kind : available[0];
+  const shown = reports?.filter((r) => r.kind === active) ?? [];
+
+  return (
+    <>
+      <Img src={day} alt="SPC storm reports" />
+      {failed && <p className="muted">Report list not available.</p>}
+      {!failed && reports === null && <p className="muted">Loading reports…</p>}
+      {reports && available.length === 0 && <p className="muted">No reports.</p>}
+      {active && (
+        <>
+          <div className="controls report-tabs">
+            <Tabs
+              value={active}
+              options={available.map((k): [string, string] => [k, `${KIND_LABEL[k]} (${reports!.filter((r) => r.kind === k).length})`])}
+              onChange={setKind}
+            />
+          </div>
+          <ul className="reports">
+            {shown.map((r, i) => {
+              const tp = reportOf(r);
+              const line = tp.format({ canonical: true });
+              return (
+                <li key={i}>
+                  <button type="button" onClick={() => onPick(tp)} title={line}>
+                    <span className={`dot kind-${r.kind}`} aria-hidden="true" />
+                    <span className="loc mono">{line}</span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </>
+      )}
+    </>
+  );
+}
+
 interface Props {
   tp: TimePlace;
   instant: Date;
   timeZone: string;
   state: string | null;
+  onPickReport: (tp: TimePlace) => void;
 }
 
-export default function DataPanel({ tp, instant, timeZone, state }: Props) {
+export default function DataPanel({ tp, instant, timeZone, state, onPickReport }: Props) {
   const now = new Date();
   const place = tp.place;
-  if (!place) {
-    return <p className="empty">Add a place to see data for it. Try a name or <code>lat,lon</code>.</p>;
-  }
-  const links = externalLinks({ lat: place.lat, lon: place.lon, instant, timeZone, state, now });
+  const links = place ? externalLinks({ lat: place.lat, lon: place.lon, instant, timeZone, state, now }) : [];
   const hour = floorHour(instant);
 
   return (
     <div className="data">
-      <Section title="Links">
-        <ul className="links">
-          {links.map((l) => (
-            <li key={l.label}>
-              <a href={l.href} target="_blank" rel="noopener noreferrer">
-                {l.label}
-              </a>
-              {l.scope && <span className="muted"> {l.scope}</span>}
-            </li>
-          ))}
-        </ul>
-      </Section>
+      {links.length > 0 && (
+        <Section title="Links">
+          <ul className="links">
+            {links.map((l) => (
+              <li key={l.label}>
+                <a href={l.href} target="_blank" rel="noopener noreferrer">
+                  {l.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </Section>
+      )}
       <Section title="Mesoanalysis" aside={<span className="muted">{isoDate(hour)} {utcClock(hour)}</span>}>
-        <Mesoanalysis lat={place.lat} lon={place.lon} instant={instant} now={now} />
+        <Mesoanalysis lat={place?.lat ?? null} lon={place?.lon ?? null} instant={instant} now={now} />
       </Section>
       {instant <= now && (
         <Section title="Storm reports" aside={<span className="muted">12z–12z</span>}>
-          <Img src={reportsImageUrl(instant)} alt="SPC storm reports" />
+          <Reports instant={instant} onPick={onPickReport} />
         </Section>
       )}
       <Section title="Surface">

@@ -151,3 +151,54 @@ export const reportsImageUrl = (t: Date): string =>
 
 export const reportsPageUrl = (t: Date): string =>
   `https://www.spc.noaa.gov/climo/reports/${reportDate(t)}_rpts.html`;
+
+export type ReportKind = "torn" | "wind" | "hail";
+
+export interface StormReport {
+  kind: ReportKind;
+  time: Date;
+  magnitude: string;
+  location: string;
+  state: string;
+  lat: number;
+  lon: number;
+  comments: string;
+}
+
+/** All SPC storm reports (tornado, wind, hail) for the 12z-12z day containing `t`. */
+export async function fetchReports(t: Date, signal?: AbortSignal): Promise<StormReport[]> {
+  const day = reportDate(t);
+  const start = Date.UTC(2000 + Number(day.slice(0, 2)), Number(day.slice(2, 4)) - 1, Number(day.slice(4, 6)), 12);
+  const kinds: ReportKind[] = ["torn", "wind", "hail"];
+  const lists = await Promise.all(
+    kinds.map(async (kind) => {
+      const res = await fetch(`https://www.spc.noaa.gov/climo/reports/${day}_rpts_${kind}.csv`, { signal });
+      if (!res.ok) throw new Error(`reports ${res.status}`);
+      const rows = (await res.text()).split(/\r?\n/).slice(1);
+      const out: StormReport[] = [];
+      for (const row of rows) {
+        const f = row.split(",");
+        if (f.length < 8) continue;
+        const hhmm = f[0]!.padStart(4, "0");
+        const hour = Number(hhmm.slice(0, 2));
+        const time = new Date(start + (hour < 12 ? DAY : 0));
+        time.setUTCHours(hour, Number(hhmm.slice(2)), 0, 0);
+        const lat = Number(f[5]);
+        const lon = Number(f[6]);
+        if (!Number.isFinite(lat) || !Number.isFinite(lon)) continue;
+        out.push({
+          kind,
+          time,
+          magnitude: f[1]!,
+          location: f[2]!,
+          state: f[4]!,
+          lat,
+          lon,
+          comments: f.slice(7).join(","),
+        });
+      }
+      return out;
+    }),
+  );
+  return lists.flat().sort((a, b) => a.time.getTime() - b.time.getTime());
+}

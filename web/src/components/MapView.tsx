@@ -6,20 +6,21 @@ import type { GeoJsonObject } from "geojson";
 import { MINUTE_MS, stamp } from "../lib/fmt";
 import { useDebounced, useJson } from "../lib/hooks";
 import { radarTileUrl } from "../lib/radar";
+import { reportTimePlace } from "../lib/moment";
+import type { TimePlace } from "timeplace";
 
 interface Props {
   lat: number | null;
   lon: number | null;
   instant: Date;
   onMove: (lat: number, lon: number) => void;
+  onPickReport: (tp: TimePlace) => void;
 }
 
 const pin = L.divIcon({ className: "pin", iconSize: [18, 18], iconAnchor: [9, 9] });
 
 const WARNING_COLORS: Record<string, string> = { TO: "#e5242b", SV: "#f2b705", EW: "#d12bd1", FF: "#2ba84a", MA: "#2b7bd1" };
 const REPORT_COLORS: Record<string, string> = { TORNADO: "#e5242b", "FUNNEL CLOUD": "#e5242b", HAIL: "#2b7bd1", "TSTM WND GST": "#f2b705", "TSTM WND DMG": "#f2b705" };
-
-const isDark = () => window.matchMedia("(prefers-color-scheme: dark)").matches;
 
 function Interactions({ lat, lon, onMove }: Pick<Props, "lat" | "lon" | "onMove">) {
   const map = useMap();
@@ -33,15 +34,8 @@ function Interactions({ lat, lon, onMove }: Pick<Props, "lat" | "lon" | "onMove"
 
 type Collection = GeoJsonObject & { features: { properties: Record<string, unknown> }[] };
 
-export default function MapView({ lat, lon, instant, onMove }: Props) {
+export default function MapView({ lat, lon, instant, onMove, onPickReport }: Props) {
   const [layers, setLayers] = useState({ radar: true, warnings: true, reports: true });
-  const [dark, setDark] = useState(isDark);
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const update = () => setDark(mq.matches);
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
-  }, []);
 
   const when = useDebounced(instant, 250);
   const window30 = (minutes: number) =>
@@ -60,9 +54,8 @@ export default function MapView({ lat, lon, instant, onMove }: Props) {
     <div className="map">
       <MapContainer center={position ?? [39, -98]} zoom={position ? 8 : 4} zoomControl={false} worldCopyJump>
         <TileLayer
-          key={dark ? "dark" : "light"}
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-          url={`https://{s}.basemaps.cartocdn.com/${dark ? "dark_all" : "light_all"}/{z}/{x}/{y}{r}.png`}
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {layers.radar && radar && <TileLayer key={radar} url={radar} opacity={0.65} zIndex={5} />}
         {warnings && (
@@ -87,6 +80,7 @@ export default function MapView({ lat, lon, instant, onMove }: Props) {
               L.circleMarker(latlng, {
                 radius: 5,
                 weight: 1,
+                bubblingMouseEvents: false,
                 color: "#fff",
                 fillOpacity: 0.95,
                 fillColor: REPORT_COLORS[String((f.properties as Record<string, unknown>).typetext).toUpperCase()] ?? "#8a8a8a",
@@ -95,6 +89,13 @@ export default function MapView({ lat, lon, instant, onMove }: Props) {
             onEachFeature={(f, layer) => {
               const p = f.properties as Record<string, string>;
               layer.bindTooltip(`${p.typetext}${p.magnitude ? ` ${p.magnitude}` : ""} · ${p.city ?? ""}`, { sticky: true });
+              layer.on("click", () => {
+                const time = new Date(p.valid ?? "");
+                if (Number.isNaN(time.getTime())) return;
+                const what = [p.typetext, p.magnitude && `${p.magnitude}${p.unit ? ` ${p.unit}` : ""}`].filter(Boolean).join(" ");
+                const where = [p.city, p.state].filter(Boolean).join(", ");
+                onPickReport(reportTimePlace(Number(p.lat), Number(p.lon), time, [what, where, p.remark].filter(Boolean).join(" · ")));
+              });
             }}
           />
         )}

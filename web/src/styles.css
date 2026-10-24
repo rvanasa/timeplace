@@ -104,8 +104,15 @@ button:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
   color: var(--muted-foreground);
   font-size: 13px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .top h1 {
@@ -116,8 +123,60 @@ button:hover {
   letter-spacing: -0.02em;
 }
 
+.top-links {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.top-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--background);
+  color: var(--foreground);
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
+}
+
+.top-links a:hover {
+  background: var(--muted);
+  border-color: var(--border);
+  transform: translateY(-1px);
+}
+
+.top-links svg,
+.top-links img {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.top-links svg {
+  fill: currentColor;
+}
+
+.top-links img {
+  object-fit: contain;
+}
+
 .field {
-  margin: 20px 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  margin: 12px -24px 24px;
+  padding: 8px 24px;
+  background: var(--background);
+  border-bottom: 1px solid var(--border);
+}
+
+.field-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .field input {
@@ -129,6 +188,48 @@ button:hover {
   border-radius: calc(var(--radius) + 2px);
   box-shadow: var(--shadow);
   font: 500 17px var(--mono);
+}
+
+.field-row input {
+  flex: 1;
+  width: auto;
+}
+
+.copy-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  min-width: 52px;
+  height: 52px;
+  padding: 0;
+  color: var(--foreground);
+  cursor: pointer;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) + 2px);
+  box-shadow: var(--shadow);
+}
+
+.copy-button:hover:not(:disabled) {
+  background: var(--muted);
+}
+
+.copy-button svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.copy-button.copied {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.copy-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 .field input:focus {
@@ -363,6 +464,101 @@ select {
   color: var(--primary-foreground);
 }
 
+.examples {
+  margin-bottom: 12px;
+  padding: 16px;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) + 2px);
+  box-shadow: var(--shadow);
+}
+
+.examples header {
+  margin-bottom: 8px;
+}
+
+.examples ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.examples button {
+  width: 100%;
+  padding: 6px 10px;
+  text-align: left;
+  font: 13px var(--mono);
+  cursor: pointer;
+}
+
+.report-tabs {
+  margin-top: 14px;
+}
+
+.reports {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 320px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.reports button {
+  display: grid;
+  grid-template-columns: 10px 1fr;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 10px;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  text-align: left;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.reports button:hover {
+  background: var(--muted);
+}
+
+.reports .mono,
+.reports .mag {
+  font-family: var(--mono);
+}
+
+.reports .loc {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reports .mag {
+  color: var(--muted-foreground);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.kind-torn.dot {
+  background: #dc2626;
+}
+
+.kind-wind.dot {
+  background: #2563eb;
+}
+
+.kind-hail.dot {
+  background: #16a34a;
+}
+
 .caption {
   margin: 8px 0 4px;
   font-size: 12px;
@@ -393,6 +589,11 @@ select {
 @media (max-width: 900px) {
   .app {
     padding: 16px;
+  }
+
+  .field {
+    margin-inline: -16px;
+    padding-inline: 16px;
   }
 
   main {

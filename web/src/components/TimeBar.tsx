@@ -38,16 +38,16 @@ export default function TimeBar({ instant, zone, local, canLocal, caption, onLoc
     <div className="card timebar">
       <div className="timebar-row">
         <input type="date" value={zonedIsoDate(parts)} onChange={(e) => setDay(e.target.value)} aria-label="Date" />
-        <output>{dragging === null ? clockLabel(instant, zone) : `${pad(Math.floor(shown / 60))}:${pad(shown % 60)}`}</output>
         <label className="check" title={canLocal || local ? undefined : "Add a place to use local time"}>
           <input
             type="checkbox"
-            checked={local}
+            checked={!local}
             disabled={!canLocal && !local}
-            onChange={(e) => onLocalChange(e.target.checked)}
+            onChange={(e) => onLocalChange(!e.target.checked)}
           />
-          Local time
+          UTC
         </label>
+        <output>{dragging === null ? clockLabel(instant, zone) : `${pad(Math.floor(shown / 60))}:${pad(shown % 60)}`}</output>
         <div className="steps">
           <button onClick={() => step(-DAY)}>−1d</button>
           <button onClick={() => step(-HOUR)}>−1h</button>

@@ -37,6 +37,16 @@ export function withZone(tp: TimePlace, instant: Date, local: boolean): TimePlac
 
 const round5 = (n: number): number => Math.round(n * 1e5) / 1e5;
 
+/** A UTC timeplace for a report; details go in the comment. */
+export function reportTimePlace(lat: number, lon: number, instant: Date, comment: string): TimePlace {
+  const clean = comment.replace(/[#\r\n]+/g, " ").replace(/\s+/g, " ").trim();
+  return new TimePlace({
+    time: { kind: "datetime", instant, timeZone: "UTC" },
+    place: new Place(lat, lon),
+    comment: clean ? `# ${clean}` : null,
+  });
+}
+
 /** Moves the place, keeping the instant and re-expressing local clocks in the new zone. */
 export function withCoords(tp: TimePlace, lat: number, lon: number): TimePlace {
   const place = new Place(round5(lat), round5(((lon + 180) % 360 + 360) % 360 - 180));
