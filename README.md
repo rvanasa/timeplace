@@ -42,6 +42,7 @@ The format is not specific to weather. It works for any use case that involves a
 ## Apps supporting the format
 
 - [Browser demo](https://ryanvandersmith.com/timeplace)
+- [Skychaser](https://skychaser.mesoview.app)
 - [Cloud inversion forecast](https://inversion.streamlit.app/)
 - [Sounding viewer](https://sounding.streamlit.app/)
 - [Mountain wave visualizer](https://mtnwave.streamlit.app/)
