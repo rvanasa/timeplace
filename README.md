@@ -32,7 +32,7 @@ The goal is to define a standard, plain-text format for severe weather events fo
 The format is not specific to weather. It works for any use case that involves a time and a place: wildfires, earthquakes, field observations, photos.
 
 ```
-2025-05-18 5:30pm Arnett, OK # Several tornadoes
+2026-04-23 8pm Enid, OK #tornado #ef4
 2022-12-02 05z 40.01499,-105.27055 # Downslope windstorm, 50-80mph
 2024-04-08 1:30pm Dallas, TX #eclipse
 ```
@@ -94,6 +94,17 @@ tp.format({ canonical: true }); // "2026-04-24 01z 36.39559,-97.87839 #tornado #
 Every part is optional; the order is always time, place, comment.
 
 > **Documentation:** [Python guide](python/README.md) · [JavaScript guide](js/README.md) · [Format specification](SPEC.md)
+
+## Demo webapp
+
+A browser demo is available at https://ryanvandersmith.com/timeplace.
+
+## Apps supporting the format
+
+- Browser demo: https://ryanvandersmith.com/timeplace
+- Cloud inversion forecast: https://inversion.streamlit.app/
+- Sounding viewer: https://sounding.streamlit.app/
+- Mountain wave visualizer: https://mtnwave.streamlit.app/
 
 ## Working with event lists
 

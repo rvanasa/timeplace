@@ -1,9 +1,24 @@
 # `timeplace`
 
+<p align="center">
+  <a href="https://github.com/rvanasa/timeplace/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/rvanasa/timeplace/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://pypi.org/project/timeplace/"><img alt="PyPI" src="https://img.shields.io/pypi/v/timeplace?logo=pypi&logoColor=white&label=PyPI"></a>
+  <a href="https://pypi.org/project/timeplace/"><img alt="Python versions" src="https://img.shields.io/pypi/pyversions/timeplace?logo=python&logoColor=white"></a>
+  <a href="https://github.com/rvanasa/timeplace"><img alt="GitHub" src="https://img.shields.io/badge/GitHub-rvanasa%2Ftimeplace-181717?logo=github"></a>
+  <a href="https://github.com/rvanasa/timeplace/blob/main/LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-blue"></a>
+</p>
+
+<p align="center">
+  <a href="../README.md"><b>Project home</b></a> ·
+  <a href="../SPEC.md"><b>Specification</b></a> ·
+  <a href="../js/README.md"><b>JavaScript docs</b></a> ·
+  <a href="https://rvanasa.github.io/timeplace/"><b>API reference</b></a>
+</p>
+
 Parse and format **timeplace** lines: a single line of text naming a time, a place, and a comment.
 
 ```
-2025-05-18 5:30pm Arnett, OK # Several tornadoes
+2026-04-23 8pm Enid, OK #tornado #ef4
 2022-12-02 05z 40.01499,-105.27055 # Downslope windstorm, 50-80mph
 ```
 
@@ -14,6 +29,10 @@ See [SPEC.md](../SPEC.md) for the format. Requires Python 3.12+.
 ```sh
 uv add timeplace      # or: pip install timeplace
 ```
+
+## Demo app
+
+Try the in-browser demo at https://ryanvandersmith.com/timeplace.
 
 ## Parsing
 

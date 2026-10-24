@@ -1,5 +1,20 @@
 # `timeplace`
 
+<p align="center">
+  <a href="https://github.com/rvanasa/timeplace/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/rvanasa/timeplace/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://www.npmjs.com/package/timeplace"><img alt="npm" src="https://img.shields.io/npm/v/timeplace?logo=npm&label=npm"></a>
+  <a href="https://www.npmjs.com/package/timeplace"><img alt="Node versions" src="https://img.shields.io/node/v/timeplace?logo=nodedotjs&logoColor=white"></a>
+  <a href="https://github.com/rvanasa/timeplace"><img alt="GitHub" src="https://img.shields.io/badge/GitHub-rvanasa%2Ftimeplace-181717?logo=github"></a>
+  <a href="https://github.com/rvanasa/timeplace/blob/main/LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-blue"></a>
+</p>
+
+<p align="center">
+  <a href="../README.md"><b>Project home</b></a> ·
+  <a href="../SPEC.md"><b>Specification</b></a> ·
+  <a href="../python/README.md"><b>Python docs</b></a> ·
+  <a href="https://rvanasa.github.io/timeplace/"><b>API reference</b></a>
+</p>
+
 Parse and format **timeplace** lines: a single line of text naming a time, a place, and a comment. See [SPEC.md](../SPEC.md) for the format. Requires Node 24+; ESM only.
 
 ```
@@ -12,6 +27,10 @@ Parse and format **timeplace** lines: a single line of text naming a time, a pla
 ```sh
 npm install timeplace
 ```
+
+## Demo app
+
+Try the in-browser demo at https://ryanvandersmith.com/timeplace.
 
 ## Parsing
 
