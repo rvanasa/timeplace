@@ -1,7 +1,7 @@
 <h1 align="center"><code>timeplace</code></h1>
 
 <p align="center">
-  Parse and format <b>timeplace</b> lines: a single line of text naming a time, a place, and a comment/tag section.
+  Parse and format <b>timeplace</b> values: single lines of text naming a time, a place, and a comment/tag section.
 </p>
 
 <p align="center">
