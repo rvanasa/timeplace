@@ -2,7 +2,7 @@
 
 Version: 0.1 (draft)
 
-A **timeplace** (or TimePlace) is a single line of text naming a moment, a place, and an optional free-form comment. It is designed for sharing weather events in chat, social media, and notes, while remaining easy to parse.
+A **timeplace** (or TimePlace) is a single line of text naming a moment, a place, and an optional free-form comment. It is designed for sharing weather events in chat, social media, and text files while remaining easy to parse.
 
 ## Examples
 
