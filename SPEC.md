@@ -7,8 +7,8 @@ A **timeplace** (or TimePlace) is a single line of text naming a moment, a place
 ## Examples
 
 ```
-2025-05-18 5:30pm Arnett, OK # Several tornadoes
 2026-04-23 8pm Enid, OK #tornado #ef4
+2025-05-18 5:30pm Arnett, OK # Several tornadoes
 2026-10-21 6:30pm Show Low, AZ #photogenic #supercell https://x.com/craigmatthews48/status/2113036632744218761
 2021-12-30 2pm Boulder, CO # Marshall Fire downslope wind, 100mph
 2022-12-02 05z Boulder, CO # Downslope wind, 50-80mph

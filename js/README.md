@@ -18,7 +18,7 @@
 Parse and format **timeplace** lines: a single line of text naming a time, a place, and a comment. See [SPEC.md](../SPEC.md) for the format. Requires Node 24+; ESM only.
 
 ```
-2025-05-18 5:30pm Arnett, OK # Several tornadoes
+2026-04-23 8pm Enid, OK #tornado #ef4
 2022-12-02 05z 40.01499,-105.27055 # Downslope windstorm, 50-80mph
 ```
 
