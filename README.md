@@ -76,7 +76,7 @@ tp.tags      # frozenset({'tornado', 'ef4'})
 tp.format(canonical=True)  # '2026-04-24 01z 36.39559,-97.87839 #tornado #ef4'
 ```
 
-### JavaScript / TypeScript (Node 20+, ESM)
+### JavaScript / TypeScript (Node 24+, ESM)
 
 ```sh
 npm install timeplace

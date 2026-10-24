@@ -1,6 +1,6 @@
 # timeplace (npm)
 
-Parse and format **timeplace** lines: a single line of text naming a time, a place, and a comment. See [SPEC.md](../SPEC.md) for the format. Requires Node 20+; ESM only.
+Parse and format **timeplace** lines: a single line of text naming a time, a place, and a comment. See [SPEC.md](../SPEC.md) for the format. Requires Node 24+; ESM only.
 
 ```
 2025-05-18 5:30pm Arnett, OK # Several tornadoes

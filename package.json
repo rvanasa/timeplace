@@ -1,0 +1,11 @@
+{
+  "name": "timeplace-release",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Release automation for timeplace",
+  "scripts": {
+    "release": "node scripts/release.mjs",
+    "release:python": "node scripts/release.mjs python",
+    "release:npm": "node scripts/release.mjs npm"
+  }
+}

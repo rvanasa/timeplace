@@ -1,8 +1,12 @@
 name: Release PyPI
 
 on:
-  push:
-    tags: ["py-v*"]
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish to PyPI
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -10,9 +14,6 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: python
     environment:
       name: pypi
       url: https://pypi.org/p/timeplace
@@ -23,9 +24,5 @@ jobs:
       - uses: astral-sh/setup-uv@v5
         with:
           python-version: "3.12"
-      - run: uv sync --locked
-      - run: uv run pytest
-      - run: uv build
-      - uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          packages-dir: python/dist/
+      - name: Run Python release script
+        run: node scripts/release.mjs python ${{ inputs.publish && '--publish' || '--dry-run' }}
