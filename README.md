@@ -18,7 +18,7 @@ The format is not specific to weather. It works for any use case that involves a
 
 ## Motivation
 
-Severe weather case studies start with a list of events: "the Enid, OK tornado", "the supercell in southeast Colorado on 7/8/23". In order to view radar, satellite, weather models, etc. for a case study, it is often necessary to use either a centralized database such as Chase Archive or Tornado Archive or manually plug the date/time into each analysis tool.
+Severe weather research often starts with a list of events: "the Enid, OK tornado", "the supercell in southeast Colorado on 7/8/23". In order to view radar, satellite, weather models, etc. for a case study, it is often necessary to use either a centralized database such as Chase Archive or Tornado Archive or manually plug the date/time into each analysis tool.
 
 `timeplace` is a standard text format to solve this problem.
 
@@ -143,7 +143,7 @@ for (const line of readFileSync("cases.txt", "utf8").split("\n")) {
 | --- | --- | --- |
 | Time | `2025-05-18`, `2025-05-18 5:30pm`, `2022-12-02 05z`, `2022-12-02 18:30z` | `am`/`pm` is local to the place; `z` is UTC, 24-hour. Date alone is allowed. |
 | Place | `Arnett, OK`, `40.01499,-105.27055` | Names are geocoded (Nominatim); coordinates are WGS84 decimal degrees. Names cannot contain `#`. |
-| Comment | `# free text`, `#tornado #ef4` | Starts at the first `#`. `#word` tokens (preceded by start or whitespace) are tags, lowercased; `# text` and URL fragments are not. |
+| Comment | `# any text`, `#tornado #ef4` | Starts at the first `#`. `#word` tokens (preceded by start or whitespace) are tags, lowercased; `# text` and URL fragments are not. |
 
 Not supported: time ranges, UTC offsets such as `-07:00`, 24-hour local time without a suffix, elevation, and place uncertainty. The full grammar, strict subset, and canonical form are in [SPEC.md](SPEC.md) (version 0.1, draft).
 

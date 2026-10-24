@@ -23,6 +23,7 @@
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "docs": "typedoc",
     "prepack": "npm run build"
   },
   "dependencies": {
@@ -30,6 +31,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
+    "typedoc": "^0.28.0",
     "typescript": "^5.6.0",
     "vitest": "^3.0.0"
   }

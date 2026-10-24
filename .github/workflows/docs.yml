@@ -1,0 +1,64 @@
+name: Docs
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - name: Python docs
+        working-directory: python
+        run: uv run --locked pdoc timeplace -o ../site/python
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: JS docs
+        working-directory: js
+        run: |
+          npm install
+          npx typedoc --out ../site/js
+
+      - name: Index
+        run: |
+          cat > site/index.html <<'EOF'
+          <!doctype html>
+          <meta charset="utf-8">
+          <title>timeplace docs</title>
+          <h1>timeplace</h1>
+          <ul>
+            <li><a href="python/">Python API</a></li>
+            <li><a href="js/">JavaScript / TypeScript API</a></li>
+          </ul>
+          EOF
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
